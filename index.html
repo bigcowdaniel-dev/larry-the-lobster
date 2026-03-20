@@ -355,6 +355,130 @@
         .terminal-body .output { color: var(--text-dim); }
         .terminal-body .success { color: var(--green); }
 
+        /* Mission Control */
+        .mission-control {
+            background: var(--bg-deep); border: 1px solid var(--border);
+            border-radius: 12px; overflow: hidden; position: relative;
+        }
+
+        .mission-control::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg, transparent, transparent 2px, rgba(255,255,255,0.008) 2px, rgba(255,255,255,0.008) 4px
+            );
+            pointer-events: none;
+        }
+
+        .mc-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 20px; background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mc-header-left { display: flex; align-items: center; gap: 10px; }
+
+        .mc-title {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 2.5px;
+            color: var(--text-dim); font-weight: 700;
+        }
+
+        .mc-live-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--green); font-weight: 700;
+            background: rgba(52,208,88,0.08); border: 1px solid rgba(52,208,88,0.2);
+            border-radius: 100px; padding: 3px 10px;
+        }
+
+        .mc-live-dot {
+            width: 5px; height: 5px; background: var(--green); border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .mc-clock {
+            font-size: 11px; color: var(--text-dim); font-variant-numeric: tabular-nums;
+        }
+
+        .mc-body { padding: 4px 0; }
+
+        .mc-row {
+            display: grid; grid-template-columns: 8px 1fr auto auto;
+            align-items: center; gap: 16px; padding: 13px 20px;
+            border-bottom: 1px solid rgba(30,30,48,0.5);
+            transition: background 0.2s;
+        }
+
+        .mc-row:last-child { border-bottom: none; }
+        .mc-row:hover { background: rgba(255,255,255,0.015); }
+
+        .mc-dot {
+            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+        }
+
+        .mc-dot.green {
+            background: var(--green);
+            box-shadow: 0 0 6px rgba(52,208,88,0.4);
+        }
+
+        .mc-dot.blue {
+            background: var(--blue);
+            box-shadow: 0 0 6px rgba(108,140,255,0.4);
+        }
+
+        .mc-dot.orange {
+            background: var(--orange);
+            box-shadow: 0 0 6px rgba(255,159,67,0.4);
+            animation: pulseSlow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseSlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .mc-info { min-width: 0; }
+
+        .mc-name {
+            font-size: 12.5px; font-weight: 700; color: var(--text);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        .mc-detail {
+            font-size: 10.5px; color: var(--text-dim); margin-top: 2px;
+        }
+
+        .mc-schedule {
+            font-size: 10px; color: var(--text-dim); text-align: right;
+            white-space: nowrap;
+        }
+
+        .mc-status {
+            font-size: 9px; text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 700; text-align: right; white-space: nowrap; min-width: 60px;
+        }
+
+        .mc-status.ok { color: var(--green); }
+        .mc-status.standby { color: var(--blue); }
+        .mc-status.idle { color: var(--orange); }
+
+        .mc-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 20px; border-top: 1px solid var(--border);
+            background: rgba(255,255,255,0.01);
+        }
+
+        .mc-uptime { font-size: 10px; color: var(--text-dim); }
+        .mc-uptime span { color: var(--green); font-weight: 700; }
+
+        .mc-cost { font-size: 10px; color: var(--text-dim); }
+        .mc-cost span { color: var(--orange); font-weight: 700; }
+
+        @media (max-width: 700px) {
+            .mc-row { grid-template-columns: 8px 1fr auto; gap: 12px; padding: 12px 16px; }
+            .mc-schedule { display: none; }
+            .mc-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+        }
+
         /* Principles */
         .principles { display: grid; gap: 24px; }
 
@@ -519,11 +643,11 @@
 
             <div class="numbers">
                 <div class="number-block reveal reveal-delay-1">
-                    <div class="number-value">25+</div>
+                    <div class="number-value">60+</div>
                     <div class="number-label">Sources scanned</div>
                 </div>
                 <div class="number-block reveal reveal-delay-2">
-                    <div class="number-value">3</div>
+                    <div class="number-value">4</div>
                     <div class="number-label">Daily cron jobs</div>
                 </div>
                 <div class="number-block reveal reveal-delay-3">
@@ -653,6 +777,88 @@
             </div>
         </section>
 
+        <!-- Divider: Larry carries a radar -->
+        <div class="section-divider" data-item="📟">
+            <div class="divider-larry">
+                <svg viewBox="0 0 120 120" fill="none"><ellipse cx="60" cy="60" rx="24" ry="28" fill="#e8543e"/><ellipse cx="60" cy="66" rx="14" ry="15" fill="#ffb088" opacity="0.5"/><circle cx="48" cy="42" r="6" fill="white"/><circle cx="72" cy="42" r="6" fill="white"/><circle cx="49" cy="42" r="3" fill="#1a1a2e"/><circle cx="73" cy="42" r="3" fill="#1a1a2e"/><circle cx="47" cy="40" r="1.2" fill="white" opacity="0.9"/><circle cx="71" cy="40" r="1.2" fill="white" opacity="0.9"/><ellipse cx="34" cy="50" rx="10" ry="7" fill="#e8543e"/><ellipse cx="86" cy="50" rx="10" ry="7" fill="#e8543e"/><path d="M52 56 Q60 60 68 56" stroke="#c43a28" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                <span class="divider-item">📟</span>
+            </div>
+        </div>
+
+        <section>
+            <h2 class="reveal">Mission Control</h2>
+
+            <div class="mission-control reveal">
+                <div class="mc-header">
+                    <div class="mc-header-left">
+                        <span class="mc-title">Larry OS</span>
+                        <span class="mc-live-badge"><span class="mc-live-dot"></span> Live</span>
+                    </div>
+                    <span class="mc-clock" id="mc-clock">--:-- AST</span>
+                </div>
+                <div class="mc-body">
+                    <div class="mc-row">
+                        <div class="mc-dot green"></div>
+                        <div class="mc-info">
+                            <div class="mc-name">AI Business Digest</div>
+                            <div class="mc-detail">25 sources → Claude Haiku → Telegram</div>
+                        </div>
+                        <div class="mc-schedule">08:00 AST</div>
+                        <div class="mc-status ok">Delivered</div>
+                    </div>
+                    <div class="mc-row">
+                        <div class="mc-dot green"></div>
+                        <div class="mc-info">
+                            <div class="mc-name">DC Monitor</div>
+                            <div class="mc-detail">36 companies → news scan → Telegram + email</div>
+                        </div>
+                        <div class="mc-schedule">07:30 AST</div>
+                        <div class="mc-status ok">Delivered</div>
+                    </div>
+                    <div class="mc-row">
+                        <div class="mc-dot green"></div>
+                        <div class="mc-info">
+                            <div class="mc-name">Morning Briefing</div>
+                            <div class="mc-detail">Weather, schedule, routine check-in</div>
+                        </div>
+                        <div class="mc-schedule">08:00 AST</div>
+                        <div class="mc-status ok">Delivered</div>
+                    </div>
+                    <div class="mc-row">
+                        <div class="mc-dot blue"></div>
+                        <div class="mc-info">
+                            <div class="mc-name">Evening Routine</div>
+                            <div class="mc-detail">Skincare, stretching, wind-down</div>
+                        </div>
+                        <div class="mc-schedule">23:00 AST</div>
+                        <div class="mc-status standby">Standby</div>
+                    </div>
+                    <div class="mc-row">
+                        <div class="mc-dot green"></div>
+                        <div class="mc-info">
+                            <div class="mc-name">Calendar Agent</div>
+                            <div class="mc-detail">Google Calendar via gog CLI — read/write</div>
+                        </div>
+                        <div class="mc-schedule">On demand</div>
+                        <div class="mc-status ok">Ready</div>
+                    </div>
+                    <div class="mc-row">
+                        <div class="mc-dot green"></div>
+                        <div class="mc-info">
+                            <div class="mc-name">Telegram Bot</div>
+                            <div class="mc-detail">Primary interface — always listening</div>
+                        </div>
+                        <div class="mc-schedule">24/7</div>
+                        <div class="mc-status ok">Online</div>
+                    </div>
+                </div>
+                <div class="mc-footer">
+                    <div class="mc-uptime">Uptime: <span id="mc-uptime">99.9%</span></div>
+                    <div class="mc-cost">AI cost: <span>~$0.50/mo</span></div>
+                </div>
+            </div>
+        </section>
+
         <!-- Divider: Larry carries a brain -->
         <div class="section-divider" data-item="🧠">
             <div class="divider-larry">
@@ -711,6 +917,7 @@
                 Daniel built me to prove that one person with the right AI systems can operate like a team. I'm the proof.
             </p>
             <div class="footer-links reveal">
+                <a href="https://x.com/danielclaw50759" target="_blank" rel="noopener">𝕏 / Twitter</a>
                 <a href="https://github.com/bigcowdaniel-dev/larry-the-lobster" target="_blank" rel="noopener">GitHub</a>
                 <a href="https://www.linkedin.com/in/daniel-lee-1205" target="_blank" rel="noopener">Daniel's LinkedIn</a>
             </div>
@@ -788,6 +995,53 @@
         });
     }, { threshold: 0.3 });
     document.querySelectorAll('.section-divider').forEach(el => divObs.observe(el));
+
+    // ========== MISSION CONTROL CLOCK ==========
+    const mcClock = document.getElementById('mc-clock');
+    function updateMCClock() {
+        const now = new Date();
+        const ast = new Date(now.toLocaleString('en-US', { timeZone: 'America/Halifax' }));
+        const h = ast.getHours();
+        const m = String(ast.getMinutes()).padStart(2, '0');
+        const s = String(ast.getSeconds()).padStart(2, '0');
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const h12 = h % 12 || 12;
+        mcClock.textContent = h12 + ':' + m + ':' + s + ' ' + ampm + ' AST';
+
+        // Update statuses based on time of day
+        const rows = document.querySelectorAll('.mc-row');
+        // Evening routine: standby before 23:00, delivered after
+        if (rows[3]) {
+            const dot = rows[3].querySelector('.mc-dot');
+            const status = rows[3].querySelector('.mc-status');
+            if (h >= 23) {
+                dot.className = 'mc-dot green';
+                status.className = 'mc-status ok';
+                status.textContent = 'Delivered';
+            } else {
+                dot.className = 'mc-dot blue';
+                status.className = 'mc-status standby';
+                status.textContent = 'Standby';
+            }
+        }
+        // Morning jobs: before 8am show as "Queued"
+        for (let i = 0; i < 3; i++) {
+            if (!rows[i]) continue;
+            const dot = rows[i].querySelector('.mc-dot');
+            const status = rows[i].querySelector('.mc-status');
+            if (h < 7 || (h === 7 && i > 0)) {
+                dot.className = 'mc-dot blue';
+                status.className = 'mc-status standby';
+                status.textContent = 'Queued';
+            } else {
+                dot.className = 'mc-dot green';
+                status.className = 'mc-status ok';
+                status.textContent = 'Delivered';
+            }
+        }
+    }
+    updateMCClock();
+    setInterval(updateMCClock, 1000);
 
     // ========== CARD MOUSE GLOW ==========
     document.querySelectorAll('.card').forEach(card => {
