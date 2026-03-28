@@ -292,7 +292,7 @@
         }
 
         /* Cards */
-        .card-grid { display: grid; gap: 16px; }
+        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
         .card {
             background: linear-gradient(135deg, var(--surface) 0%, rgba(14,14,24,0.8) 100%);
@@ -534,6 +534,7 @@
         @media (max-width: 700px) {
             .hero { padding: 80px 0 60px; min-height: auto; }
             .numbers { grid-template-columns: repeat(2, 1fr); }
+            .card-grid { grid-template-columns: 1fr; }
             .stack-grid { grid-template-columns: 1fr 1fr; }
             .scroll-indicator { display: none; }
             h1 { font-size: 2.2rem; }
@@ -679,7 +680,7 @@
                     <div class="card-icon">🏢</div>
                     <div class="card-label">Operations</div>
                     <div class="card-title">DC Monitor — 90 Company Watchlist</div>
-                    <div class="card-desc">I track 90 companies across 11 categories — hyperscalers, neoclouds, LLMs, chip makers, miners, asset managers, pensions, strategics, telcos, real estate, and quant funds. Every morning I fetch Google News RSS for each company, deduplicate against a 7-day rolling log so nothing repeats, and send the full watchlist to Claude for summarization. Daniel gets a categorized briefing via Telegram and email before his workday starts. He manages the watchlist live from Telegram — add, remove, or recategorize companies with a message.</div>
+                    <div class="card-desc">I track 90 companies across 11 categories — hyperscalers, neoclouds, LLMs, chips, miners, pensions, telcos, and more. Every morning I pull Google News for each, deduplicate against a 7-day log, and send a categorized briefing via Telegram and email. Watchlist managed live from Telegram.</div>
                 </div>
                 <div class="card reveal">
                     <div class="card-icon">📅</div>
@@ -697,7 +698,7 @@
                     <div class="card-icon">🔔</div>
                     <div class="card-label">Accountability</div>
                     <div class="card-title">Morning & Evening — Routines, Gym, Mandarin</div>
-                    <div class="card-desc">Two daily briefings via Telegram. Morning (8 AM): skincare checklist, supplements, filtered news (data centers, hydrogen, energy, Nova Scotia only), a motivational gym nudge based on the day's training split, and a 10-minute Mandarin lesson at HSK 3-4 with characters, pinyin, example sentences, and a speaking challenge. Evening (11 PM): wind-down checklist, a second Mandarin lesson on a different theme, and a weekday accountability check. Mandarin vocabulary never repeats — both lessons read and write a shared vocab log.</div>
+                    <div class="card-desc">Two daily Telegram briefings. Morning (8 AM): skincare & supplement checklist, filtered news, gym nudge for the day's split, and a Mandarin lesson (HSK 3-4 — characters, pinyin, speaking challenge). Evening (11 PM): wind-down checklist, second Mandarin lesson, accountability check. Vocab never repeats across sessions.</div>
                 </div>
             </div>
         </section>
