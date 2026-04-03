@@ -482,7 +482,30 @@
 
         .mc-cost { font-size: 10px; color: var(--text-dim); }
         .mc-cost span { color: var(--orange); font-weight: 700; }
-
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+            .bubble,
+            .grain,
+            .ocean-gradient,
+            .hero-glow,
+            .hero-glow-2,
+            .scroll-indicator {
+                display: none !important;
+            }
+            .reveal,
+            .reveal.visible {
+                opacity: 1;
+                transform: none;
+            }
+            .card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+        }
         @media (max-width: 700px) {
             .mc-body { grid-template-columns: 1fr; }
             .mc-row { grid-template-columns: 8px 1fr auto; gap: 12px; padding: 12px 16px; }
@@ -536,7 +559,6 @@
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
         .reveal-delay-4 { transition-delay: 0.4s; }
-
         @media (max-width: 700px) {
             .hero { padding: 80px 0 60px; min-height: auto; }
             .numbers { grid-template-columns: repeat(2, 1fr); }
@@ -636,7 +658,7 @@
 
             <div class="status-bar">
                 <div class="status-dot"></div>
-                <span class="status-text">Online — Mac mini, Halifax AST</span>
+                <span class="status-text" id="status-text">Online - Mac mini, Halifax time</span>
             </div>
 
             <div class="scroll-indicator">
@@ -852,7 +874,7 @@
                         <span class="mc-title">Larry OS</span>
                         <span class="mc-live-badge"><span class="mc-live-dot"></span> Live</span>
                     </div>
-                    <span class="mc-clock" id="mc-clock">--:-- AST</span>
+                    <span class="mc-clock" id="mc-clock">--:-- AT</span>
                 </div>
                 <div class="mc-body">
                     <div class="mc-row">
@@ -861,7 +883,7 @@
                             <div class="mc-name">DC Monitor</div>
                             <div class="mc-detail">90 companies → Google News RSS → deduplicate → Telegram + email</div>
                         </div>
-                        <div class="mc-schedule">07:30 AST</div>
+                        <div class="mc-schedule">07:30</div>
                         <div class="mc-status ok">Delivered</div>
                     </div>
                     <div class="mc-row">
@@ -870,7 +892,7 @@
                             <div class="mc-name">Morning Briefing</div>
                             <div class="mc-detail">Checklist, news, gym, Mandarin lesson → Telegram</div>
                         </div>
-                        <div class="mc-schedule">08:00 AST</div>
+                        <div class="mc-schedule">08:00</div>
                         <div class="mc-status ok">Delivered</div>
                     </div>
                     <div class="mc-row">
@@ -879,7 +901,7 @@
                             <div class="mc-name">Best Finds</div>
                             <div class="mc-detail">25 sources → Claude Haiku → Telegram</div>
                         </div>
-                        <div class="mc-schedule">17:00 AST</div>
+                        <div class="mc-schedule">17:00</div>
                         <div class="mc-status ok">Delivered</div>
                     </div>
                     <div class="mc-row">
@@ -888,7 +910,7 @@
                             <div class="mc-name">Evening Routine</div>
                             <div class="mc-detail">Checklist, Mandarin lesson, accountability → Telegram</div>
                         </div>
-                        <div class="mc-schedule">23:00 AST</div>
+                        <div class="mc-schedule">23:00</div>
                         <div class="mc-status standby">Standby</div>
                     </div>
                     <div class="mc-row">
@@ -1001,146 +1023,142 @@
         </footer>
     </div>
 
-    <script>
-    // ========== EYE TRACKING ==========
+        <script>
     const hero = document.getElementById('larry-hero');
     const pupilL = hero.querySelector('.larry-pupil-l');
     const pupilR = hero.querySelector('.larry-pupil-r');
-
-    document.addEventListener('mousemove', (e) => {
-        const rect = hero.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height * 0.2;
-        const dx = (e.clientX - cx) / window.innerWidth;
-        const dy = (e.clientY - cy) / window.innerHeight;
-        const maxMove = 2.5;
-        const mx = Math.max(-maxMove, Math.min(maxMove, dx * 8));
-        const my = Math.max(-maxMove, Math.min(maxMove, dy * 6));
-        pupilL.setAttribute('cx', 45 + mx);
-        pupilL.setAttribute('cy', 20 + my);
-        pupilR.setAttribute('cx', 77 + mx);
-        pupilR.setAttribute('cy', 20 + my);
-    });
-
-    // ========== PARALLAX BUBBLES ==========
     const bgEl = document.getElementById('parallax-bg');
-    for (let i = 0; i < 18; i++) {
-        const b = document.createElement('div');
-        b.className = 'bubble';
-        const sz = 2 + Math.random() * 10;
-        b.style.width = sz + 'px';
-        b.style.height = sz + 'px';
-        b.style.left = Math.random() * 100 + '%';
-        b.style.animationDuration = (10 + Math.random() * 22) + 's';
-        b.style.animationDelay = (-Math.random() * 22) + 's';
-        bgEl.appendChild(b);
-    }
-
-    // ========== PARALLAX SCROLL ==========
     const hg1 = document.querySelector('.hero-glow');
     const hg2 = document.querySelector('.hero-glow-2');
     const scrollInd = document.querySelector('.scroll-indicator');
-
-    window.addEventListener('scroll', () => {
-        const sy = window.scrollY;
-        if (hg1) hg1.style.transform = `translateY(${sy * 0.3}px)`;
-        if (hg2) hg2.style.transform = `translateY(${sy * 0.15}px)`;
-        bgEl.style.opacity = Math.max(0, 1 - sy / 1000);
-        if (scrollInd && sy > 80) {
-            scrollInd.style.opacity = '0';
-            scrollInd.style.transition = 'opacity 0.4s';
-        }
-    }, { passive: true });
-
-    // ========== SCROLL REVEAL ==========
-    const obs = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-    // ========== DIVIDER LARRY SCUTTLE ==========
-    const divObs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            const larry = e.target.querySelector('.divider-larry');
-            if (!larry) return;
-            if (e.isIntersecting) {
-                larry.classList.add('scuttle');
-            } else {
-                larry.classList.remove('scuttle');
-            }
-        });
-    }, { threshold: 0.3 });
-    document.querySelectorAll('.section-divider').forEach(el => divObs.observe(el));
-
-    // ========== MISSION CONTROL CLOCK ==========
+    const statusText = document.getElementById('status-text');
     const mcClock = document.getElementById('mc-clock');
-    function updateMCClock() {
-        const now = new Date();
-        const ast = new Date(now.toLocaleString('en-US', { timeZone: 'America/Halifax' }));
-        const h = ast.getHours();
-        const m = String(ast.getMinutes()).padStart(2, '0');
-        const s = String(ast.getSeconds()).padStart(2, '0');
-        const ampm = h >= 12 ? 'PM' : 'AM';
-        const h12 = h % 12 || 12;
-        mcClock.textContent = h12 + ':' + m + ':' + s + ' ' + ampm + ' AST';
+    const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const prefersReducedMotion = () => reduceMotionQuery.matches;
 
-        // Update statuses based on time of day
-        const rows = document.querySelectorAll('.mc-row');
-        // Evening routine: standby before 23:00, delivered after
-        if (rows[3]) {
-            const dot = rows[3].querySelector('.mc-dot');
-            const status = rows[3].querySelector('.mc-status');
-            if (h >= 23) {
-                dot.className = 'mc-dot green';
-                status.className = 'mc-status ok';
-                status.textContent = 'Delivered';
-            } else {
-                dot.className = 'mc-dot blue';
-                status.className = 'mc-status standby';
-                status.textContent = 'Standby';
-            }
-        }
-        // Morning jobs: rows[0]=DC Monitor (07:30), rows[1]=Morning Briefing (08:00)
-        for (let i = 0; i < 2; i++) {
-            if (!rows[i]) continue;
-            const dot = rows[i].querySelector('.mc-dot');
-            const status = rows[i].querySelector('.mc-status');
-            if (h < 7 || (h === 7 && i > 0)) {
-                dot.className = 'mc-dot blue';
-                status.className = 'mc-status standby';
-                status.textContent = 'Queued';
-            } else {
-                dot.className = 'mc-dot green';
-                status.className = 'mc-status ok';
-                status.textContent = 'Delivered';
-            }
-        }
-        // Best Finds (rows[2]): queued before 17:00, delivered after
-        if (rows[2]) {
-            const dot = rows[2].querySelector('.mc-dot');
-            const status = rows[2].querySelector('.mc-status');
-            if (h < 17) {
-                dot.className = 'mc-dot blue';
-                status.className = 'mc-status standby';
-                status.textContent = 'Queued';
-            } else {
-                dot.className = 'mc-dot green';
-                status.className = 'mc-status ok';
-                status.textContent = 'Delivered';
-            }
+    if (!prefersReducedMotion()) {
+        document.addEventListener('mousemove', (e) => {
+            const rect = hero.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height * 0.2;
+            const dx = (e.clientX - cx) / window.innerWidth;
+            const dy = (e.clientY - cy) / window.innerHeight;
+            const maxMove = 2.5;
+            const mx = Math.max(-maxMove, Math.min(maxMove, dx * 8));
+            const my = Math.max(-maxMove, Math.min(maxMove, dy * 6));
+            pupilL.setAttribute('cx', 45 + mx);
+            pupilL.setAttribute('cy', 20 + my);
+            pupilR.setAttribute('cx', 77 + mx);
+            pupilR.setAttribute('cy', 20 + my);
+        });
+    }
+
+    if (!prefersReducedMotion()) {
+        for (let i = 0; i < 18; i += 1) {
+            const b = document.createElement('div');
+            const sz = 2 + Math.random() * 10;
+            b.className = 'bubble';
+            b.style.width = `${sz}px`;
+            b.style.height = `${sz}px`;
+            b.style.left = `${Math.random() * 100}%`;
+            b.style.animationDuration = `${10 + Math.random() * 22}s`;
+            b.style.animationDelay = `${-Math.random() * 22}s`;
+            bgEl.appendChild(b);
         }
     }
+
+    if (!prefersReducedMotion()) {
+        window.addEventListener('scroll', () => {
+            const sy = window.scrollY;
+            if (hg1) hg1.style.transform = `translateY(${sy * 0.3}px)`;
+            if (hg2) hg2.style.transform = `translateY(${sy * 0.15}px)`;
+            bgEl.style.opacity = Math.max(0, 1 - sy / 1000);
+            if (scrollInd && sy > 80) {
+                scrollInd.style.opacity = '0';
+                scrollInd.style.transition = 'opacity 0.4s';
+            }
+        }, { passive: true });
+    }
+
+    if (prefersReducedMotion()) {
+        document.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+    } else {
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
+    }
+
+    function getHalifaxParts(now) {
+        const parts = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'America/Halifax',
+            hour: 'numeric',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+            timeZoneName: 'short'
+        }).formatToParts(now);
+
+        const readPart = (type) => parts.find((part) => part.type === type)?.value || '';
+        return {
+            hour: Number(readPart('hour')),
+            minute: Number(readPart('minute')),
+            second: Number(readPart('second')),
+            dayPeriod: readPart('dayPeriod'),
+            zone: readPart('timeZoneName') || 'AT'
+        };
+    }
+
+    function toMinutes(parts) {
+        let hour24 = parts.hour % 12;
+        if (parts.dayPeriod === 'PM') {
+            hour24 += 12;
+        }
+        return hour24 * 60 + parts.minute;
+    }
+
+    function setTimedStatus(row, delivered, beforeLabel, afterLabel) {
+        if (!row) return;
+        const dot = row.querySelector('.mc-dot');
+        const status = row.querySelector('.mc-status');
+        dot.className = delivered ? 'mc-dot green' : 'mc-dot blue';
+        status.className = delivered ? 'mc-status ok' : 'mc-status standby';
+        status.textContent = delivered ? afterLabel : beforeLabel;
+    }
+
+    function updateMCClock() {
+        const halifax = getHalifaxParts(new Date());
+        const totalMinutes = toMinutes(halifax);
+        const zoneLabel = halifax.zone;
+
+        mcClock.textContent = `${halifax.hour}:${String(halifax.minute).padStart(2, '0')}:${String(halifax.second).padStart(2, '0')} ${halifax.dayPeriod} ${zoneLabel}`;
+        if (statusText) {
+            statusText.textContent = `Online - Mac mini, Halifax ${zoneLabel}`;
+        }
+
+        const rows = document.querySelectorAll('.mc-row');
+        setTimedStatus(rows[0], totalMinutes >= 7 * 60 + 30, 'Queued', 'Delivered');
+        setTimedStatus(rows[1], totalMinutes >= 8 * 60, 'Queued', 'Delivered');
+        setTimedStatus(rows[2], totalMinutes >= 17 * 60, 'Queued', 'Delivered');
+        setTimedStatus(rows[3], totalMinutes >= 23 * 60, 'Standby', 'Delivered');
+    }
+
     updateMCClock();
     setInterval(updateMCClock, 1000);
 
-    // ========== CARD MOUSE GLOW ==========
-    document.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const r = card.getBoundingClientRect();
-            card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-            card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    if (!prefersReducedMotion()) {
+        document.querySelectorAll('.card').forEach((card) => {
+            card.addEventListener('mousemove', (e) => {
+                const r = card.getBoundingClientRect();
+                card.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+                card.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+            });
         });
-    });
+    }
     </script>
 </body>
 </html>
